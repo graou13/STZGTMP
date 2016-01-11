@@ -1,0 +1,255 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="WindowsMediaPlayer.MainWindow"
+        Title="Windows Media Player" Height="970" Width="1870" MinWidth="550" MinHeight="360" WindowStartupLocation="CenterScreen">
+    <DockPanel>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="SwitchableStates">
+                <VisualState x:Name="ShowImage">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ImagePlayer" Storyboard.TargetProperty="Visibility" Duration="0">
+                            <DiscreteObjectKeyFrame KeyTime="0">
+                                <DiscreteObjectKeyFrame.Value>
+                                    <Visibility>Visible</Visibility>
+                                </DiscreteObjectKeyFrame.Value>
+                            </DiscreteObjectKeyFrame>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MediaPlayer" Storyboard.TargetProperty="Visibility" Duration="0">
+                            <DiscreteObjectKeyFrame KeyTime="0">
+                                <DiscreteObjectKeyFrame.Value>
+                                    <Visibility>Collapsed</Visibility>
+                                </DiscreteObjectKeyFrame.Value>
+                            </DiscreteObjectKeyFrame>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="FileListContainer" Storyboard.TargetProperty="Visibility" Duration="0">
+                            <DiscreteObjectKeyFrame KeyTime="0">
+                                <DiscreteObjectKeyFrame.Value>
+                                    <Visibility>Collapsed</Visibility>
+                                </DiscreteObjectKeyFrame.Value>
+                            </DiscreteObjectKeyFrame>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+                <VisualState x:Name="ShowMedia">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ImagePlayer" Storyboard.TargetProperty="Visibility" Duration="0">
+                            <DiscreteObjectKeyFrame KeyTime="0">
+                                <DiscreteObjectKeyFrame.Value>
+                                    <Visibility>Collapsed</Visibility>
+                                </DiscreteObjectKeyFrame.Value>
+                            </DiscreteObjectKeyFrame>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MediaPlayer" Storyboard.TargetProperty="Visibility" Duration="0">
+                            <DiscreteObjectKeyFrame KeyTime="0">
+                                <DiscreteObjectKeyFrame.Value>
+                                    <Visibility>Visible</Visibility>
+                                </DiscreteObjectKeyFrame.Value>
+                            </DiscreteObjectKeyFrame>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="FileListContainer" Storyboard.TargetProperty="Visibility" Duration="0">
+                            <DiscreteObjectKeyFrame KeyTime="0">
+                                <DiscreteObjectKeyFrame.Value>
+                                    <Visibility>Collapsed</Visibility>
+                                </DiscreteObjectKeyFrame.Value>
+                            </DiscreteObjectKeyFrame>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+                <VisualState x:Name="ShowFiles">
+                    <Storyboard>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ImagePlayer" Storyboard.TargetProperty="Visibility" Duration="0">
+                            <DiscreteObjectKeyFrame KeyTime="0">
+                                <DiscreteObjectKeyFrame.Value>
+                                    <Visibility>Collapsed</Visibility>
+                                </DiscreteObjectKeyFrame.Value>
+                            </DiscreteObjectKeyFrame>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MediaPlayer" Storyboard.TargetProperty="Visibility" Duration="0">
+                            <DiscreteObjectKeyFrame KeyTime="0">
+                                <DiscreteObjectKeyFrame.Value>
+                                    <Visibility>Collapsed</Visibility>
+                                </DiscreteObjectKeyFrame.Value>
+                            </DiscreteObjectKeyFrame>
+                        </ObjectAnimationUsingKeyFrames>
+                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="FileListContainer" Storyboard.TargetProperty="Visibility" Duration="0">
+                            <DiscreteObjectKeyFrame KeyTime="0">
+                                <DiscreteObjectKeyFrame.Value>
+                                    <Visibility>Visible</Visibility>
+                                </DiscreteObjectKeyFrame.Value>
+                            </DiscreteObjectKeyFrame>
+                        </ObjectAnimationUsingKeyFrames>
+                    </Storyboard>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <Menu x:Name="menu" Height="20" DockPanel.Dock="Top">
+            <MenuItem Header="File">
+                <MenuItem Header="Open File" x:Name="open"/>
+                <MenuItem Header="Exit"/>
+            </MenuItem>
+            <MenuItem Header="Playback">
+                <MenuItem Header="Speed">
+                    <MenuItem Header="Faster" Name="faster_speed" Click="EditSpeed"/>
+                    <MenuItem Header="Normal" Name="normal_speed" Click="EditSpeed"/>
+                    <MenuItem Header="Slower" Name="slower_speed" Click="EditSpeed"/>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="Jump backward" Click="PrevChapt_Click"/>
+                <MenuItem Header="Jump forward" Click="NextChapt_Click"/>
+                <Separator/>
+                <MenuItem x:Name="MenuPlay" Header="Play" Click="Play_Click"/>
+                <MenuItem Header="Stop" Click="Stop_Click"/>
+                <MenuItem Header="Previous" Click="PrevMedia_Click"/>
+                <MenuItem Header="Next" Click="NextMedia_Click"/>
+            </MenuItem>
+            <MenuItem Header="Audio">
+                <MenuItem Header="Increase Volume" x:Name="increase_volume"/>
+                <MenuItem Header="Decrease Volume" x:Name="drecrease_volume"/>
+                <MenuItem Header="Mute" x:Name="mute"/>
+            </MenuItem>
+            <MenuItem Header="Video">
+                <MenuItem Header="fullscreen" Click="Fullscreen_Click"/>
+            </MenuItem>
+            <MenuItem Header="View">
+                <MenuItem Header="Playlist" Click="Display_Playlist"/>
+            </MenuItem>
+            <MenuItem Header="Help">
+                <MenuItem Header="About" x:Name="about"/>
+            </MenuItem>
+        </Menu>
+        <DockPanel x:Name="ControlPanel" Height="80" DockPanel.Dock="Bottom">
+            <DockPanel DockPanel.Dock="Top" Height="40">
+                <TextBlock x:Name="MediaTimeText" DockPanel.Dock="Left" VerticalAlignment="Center" Text="{Binding Path=TimeText}"/>
+                <Slider x:Name="MediaTime" VerticalAlignment="Center" Value="{Binding Path=Time, Mode=TwoWay}" Minimum="0" Maximum="1" IsEnabled="False"/>
+            </DockPanel>
+            <Button Height="30" Width="30" Margin="2,0,2,0" DockPanel.Dock="Left" x:Name="Stop" Click="Stop_Click">
+                <Image x:Name="StopImg"/>
+            </Button>
+            <Button Height="30" Width="30" Margin="2,0,2,0" DockPanel.Dock="Left" x:Name="Play" Click="Play_Click">
+                <Image x:Name="PlayImg"/>
+            </Button>
+            <Button Height="30" Width="30" Margin="2,0,2,0" DockPanel.Dock="Left" x:Name="PrevChapt" Click="PrevChapt_Click">
+                <Image x:Name="PrevChaptImg"/>
+            </Button>
+            <Button Height="30" Width="30" Margin="2,0,2,0" DockPanel.Dock="Left" x:Name="NextChapt" Click="NextChapt_Click">
+                <Image x:Name="NextChaptImg"/>
+            </Button>
+            <Button Height="30" Width="30" Margin="2,0,2,0" DockPanel.Dock="Left" x:Name="PrevMedia" Click="PrevMedia_Click">
+                <Image x:Name="PrevMediaImg"/>
+            </Button>
+            <Button Height="30" Width="30" Margin="2,0,2,0" DockPanel.Dock="Left" x:Name="NextMedia" Click="NextMedia_Click">
+                <Image x:Name="NextMediaImg"/>
+            </Button>
+            <Button Height="30" Width="30" Margin="2,0,2,0" DockPanel.Dock="Left" x:Name="Repeat" Click="Repeat_Click">
+                <Image x:Name="RepeatImg"/>
+            </Button>
+            <Button Height="30" Width="30" Margin="2,0,2,0" DockPanel.Dock="Left" x:Name="Shuffle" Click="Shuffle_Click">
+                <Image x:Name="ShuffleImg"/>
+            </Button>
+            <Button Height="30" Width="30" Margin="2,0,2,0" DockPanel.Dock="Left" x:Name="Playlist" Click="Display_Playlist">
+                <Image x:Name="PlaylistImg"/>
+            </Button>
+            <Button Height="30" Width="30" Margin="2,0,2,0" DockPanel.Dock="Left" x:Name="Fullscreen" Click="Fullscreen_Click">
+                <Image x:Name="FullscreenImg"/>
+            </Button>
+            <Slider Width="100" VerticalAlignment="Center"  DockPanel.Dock="Right" x:Name="VolumeSlider" Value="{Binding Path=Volume}" Minimum="0" Maximum="100"/>
+            <Button Height="30" Width="30" Margin="4,0,2,0" DockPanel.Dock="Right" x:Name="Volume" Click="Volume_Click">
+                <Image x:Name="VolumeImg"/>
+            </Button>
+            <Grid></Grid>
+        </DockPanel>
+        <Grid>
+            <DockPanel x:Name="FileListContainer" Visibility="Visible">
+                <StackPanel Width="100" DockPanel.Dock="Left">
+                    <TextBlock FontWeight="Bold" x:Name="Location">Liste de lecture</TextBlock>
+                    <Button Click="Display_Playlist">
+                        Liste de lecture
+                    </Button>
+                    <Button Click="Display_SavedPlaylists">
+                        Bibliothèque
+                    </Button>
+                    <TextBlock FontWeight="Bold">Poste de Travail</TextBlock>
+                    <Button Click="Display_Audio">
+                        Ma Musique
+                    </Button>
+                    <Button Click="Display_Video">
+                        Mes Vidéos
+                    </Button>
+                    <Button Click="Display_Image">
+                        Mes Images
+                    </Button>
+                </StackPanel>
+                <DataGrid x:Name="FileList" AutoGenerateColumns="False" IsReadOnly="True" CanUserReorderColumns="True" CanUserResizeRows="False" CanUserDeleteRows="True" CanUserAddRows="False" ItemsSource="{Binding}"
+                          RowHeaderWidth="0"  Background="White" GridLinesVisibility="None" AlternationCount="2" SelectionChanged="FileList_SelectionChanged" PreparingCellForEdit="FileList_PreparingCellForEdit">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Titre" Binding="{Binding Path=Titre}"/>
+                        <DataGridTextColumn x:Name="DureeColumn" Header="Durée" Binding="{Binding Path=Longueur}"/>
+                        <DataGridTextColumn x:Name="ArtisteColumn" Visibility="Collapsed" Header="Artiste" Binding="{Binding Path='Artistes ayant participé'}"/>
+                        <DataGridTextColumn x:Name="GenreColumn" Header="Genre" Binding="{Binding Path=Genre}"/>
+                        <DataGridTextColumn x:Name="AlbumColumn" Header="Album" Binding="{Binding Path=Album}"/>
+                        <DataGridTextColumn x:Name="NumeroColumn" Header="Numéro de piste" Binding="{Binding Path='N°'}"/>
+                        <DataGridTextColumn x:Name="DescriptionColumn" Visibility="Collapsed" Header="Description" Binding="{Binding Path=Description}"/>
+                        <DataGridTextColumn x:Name="NoteColumn" Visibility="Collapsed" Header="Note" Binding="{Binding Path=Notation}"/>
+                        <DataGridTextColumn x:Name="IDColumn" Visibility="Collapsed" Header="ID" Binding="{Binding Path=ID}"/>
+                        <DataGridTextColumn x:Name="URIColumn" Visibility="Collapsed" Header="URI" Binding="{Binding Path=URI}"/>
+                        <DataGridTextColumn x:Name="JaquetteColumn" Visibility="Collapsed" Header="Jaquette" Binding="{Binding Path=Jaquette}"/>
+                    </DataGrid.Columns>
+                    <DataGrid.Resources>
+                        <ContextMenu x:Key="DataGridColumnHeaderContextMenu">
+                            <MenuItem IsCheckable="True" IsChecked="True" Header="Durée" Name="Durée" Checked="FileContext_Checked" Unchecked="FileContext_Unchecked"/>
+                            <MenuItem IsCheckable="True" IsChecked="False" Header="Artiste" Name="Artiste" Checked="FileContext_Checked" Unchecked="FileContext_Unchecked"/>
+                            <MenuItem IsCheckable="True" IsChecked="True" Header="Genre" Name="Genre" Checked="FileContext_Checked" Unchecked="FileContext_Unchecked"/>
+                            <MenuItem IsCheckable="True" IsChecked="True" Header="Album" Name="Album" Checked="FileContext_Checked" Unchecked="FileContext_Unchecked"/>
+                            <MenuItem IsCheckable="True" IsChecked="True" Header="Numéro de piste" Name="Numéro_de_piste" Checked="FileContext_Checked" Unchecked="FileContext_Unchecked"/>
+                            <MenuItem IsCheckable="True" IsChecked="False" Header="Description" Name="Description" Checked="FileContext_Checked" Unchecked="FileContext_Unchecked"/>
+                            <MenuItem IsCheckable="True" IsChecked="False" Header="Note" Name="Note" Checked="FileContext_Checked" Unchecked="FileContext_Unchecked"/>
+                            <MenuItem IsCheckable="True" IsChecked="False" Header="ID" Name="ID" Checked="FileContext_Checked" Unchecked="FileContext_Unchecked"/>
+                            <MenuItem IsCheckable="True" IsChecked="False" Header="URI" Name="URI" Checked="FileContext_Checked" Unchecked="FileContext_Unchecked"/>
+                            <MenuItem IsCheckable="True" IsChecked="False" Header="Jaquette" Name="Jaquette" Checked="FileContext_Checked" Unchecked="FileContext_Unchecked"/>
+                        </ContextMenu>
+                        <ContextMenu x:Key="DataGridRowsContextMenu">
+                            <MenuItem Header="Informations" Click="DisplayInfos"/>
+                            <Separator/>
+                            <MenuItem Header="Ouvrir le dossier contenant le fichier" Click="OpenFolder"/>
+                            <Separator/>
+                            <MenuItem Header="Ajouter à la liste de lecture" Click="AddFile"/>
+                            <Separator/>
+                            <MenuItem Header="Enregistrer la liste de lecture" Click="SavePlaylist"/>
+                            <Separator/>
+                            <MenuItem Header="Trier par">
+                                <MenuItem Header="Titre croissant" Name="Titre_ASC" Click="SortOrder"/>
+                                <MenuItem Header="Titre décroissant" Name="Titre_DESC" Click="SortOrder"/>
+                                <MenuItem Header="Artiste croissant" Name="Artiste_ASC" Click="SortOrder"/>
+                                <MenuItem Header="Artiste décroissant" Name="Artiste_DESC" Click="SortOrder"/>
+                                <MenuItem Header="Album croissant" Name="Album_ASC" Click="SortOrder"/>
+                                <MenuItem Header="Album décroissant" Name="Album_DESC" Click="SortOrder"/>
+                                <MenuItem Header="Numéro de piste croissant" Name="Numéro_de_piste_ASC" Click="SortOrder"/>
+                                <MenuItem Header="Numéro de piste décroissant" Name="Numéro_de_piste_DESC" Click="SortOrder"/>
+                                <MenuItem Header="URI croissant" Name="URI_ASC" Click="SortOrder"/>
+                                <MenuItem Header="URI décroissant" Name="URI_DESC" Click="SortOrder"/>
+                            </MenuItem>
+                        </ContextMenu>
+                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                            <Setter Property="ContextMenu" Value="{StaticResource ResourceKey=DataGridColumnHeaderContextMenu}"/>
+                        </Style>
+                        <Style TargetType="{x:Type DataGridRow}">
+                            <Setter Property="ContextMenu" Value="{StaticResource ResourceKey=DataGridRowsContextMenu}"/>
+                            <Style.Triggers>
+                                <Trigger Property="ItemsControl.AlternationIndex" Value="0">
+                                    <Setter Property="Background" Value="White"/>
+                                </Trigger>
+                                <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                                    <Setter Property="Background" Value="WhiteSmoke"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.Resources>
+                    
+                </DataGrid>
+            </DockPanel>
+            <Image x:Name="ImagePlayer" Visibility="Collapsed" HorizontalAlignment="Left" Height="890" VerticalAlignment="Top" Width="1870" Margin="0,20,0,0"/>
+            <MediaElement x:Name="MediaPlayer" Visibility="Collapsed" UnloadedBehavior="Manual" LoadedBehavior="Manual" HorizontalAlignment="Left" Height="890" VerticalAlignment="Top" Width="1870" Margin="0,20,0,0" />
+        </Grid>
+    </DockPanel>
+</Window>
