@@ -34,13 +34,14 @@ namespace WindowsMediaPlayer
         private DataTable files = new DataTable();
         private DataView filesOrder;
         private System.Drawing.Image IconMap;
-        private bool isFullscreen = false;
+        public bool isFullscreen = false;
         List<int> ColumnListPerID = new List<int> {21, 27, 2, 13, 16, 14, 26, 187, 19, 9}; // do not remove any of those (you can add some if you want, list of id in columns_list.txt)
         List<string> ColumnListPerName = new List<string> { "ID", "URI", "Jaquette"}; // nor these
         public MainWindow()
         {
             InitializeComponent();
-            playlist = new Playlist(MediaPlayer, ImagePlayer);
+            Application.Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
+            playlist = new Playlist(ref MediaPlayer, ref ImagePlayer);
             filesOrder = files.DefaultView;
             playlist.elemsOrder = playlist.elems.DefaultView;
             Debug.WriteLine("begin loading IconMap");
@@ -178,7 +179,7 @@ namespace WindowsMediaPlayer
             files.Rows.Add(data);
         }
 
-        private BitmapSource getIcon(int Index)
+        public BitmapSource getIcon(int Index)
         {
             if (IconMap != null)
             {
@@ -210,7 +211,7 @@ namespace WindowsMediaPlayer
         {
             if (playlist.elems.Rows.Count > 0)
             {
-                playlist.Play();
+                if (playlist.Play() == false) { Display_Playlist(sender, e); return; }
                 PlayImg.Source = getIcon(1);
                 Play.Click += Pause_Click;
                 Play.Click -= Play_Click;
@@ -296,19 +297,21 @@ namespace WindowsMediaPlayer
             playlist.isShuffled = !playlist.isShuffled;
         }
 
-        private void Fullscreen_Click(object sender, RoutedEventArgs e)
+        public void Fullscreen_Click(object sender, RoutedEventArgs e)
         {
             if (playlist.allowFullscreen && !isFullscreen)
             {
                 WindowState = System.Windows.WindowState.Maximized;
                 WindowStyle = System.Windows.WindowStyle.None;
                 menu.Visibility = System.Windows.Visibility.Collapsed;
+                VolumeImg.Source = getIcon(15);
             }
             else if (playlist.allowFullscreen)
             {
                 WindowState = System.Windows.WindowState.Normal;
                 WindowStyle = System.Windows.WindowStyle.SingleBorderWindow;
                 menu.Visibility = System.Windows.Visibility.Visible;
+                VolumeImg.Source = getIcon(14);
             }
             isFullscreen = !isFullscreen;
         }
@@ -338,8 +341,10 @@ namespace WindowsMediaPlayer
             FileList.IsReadOnly = true;
         }
 
-        private void Display_Playlist(object sender, RoutedEventArgs e)
+        public void Display_Playlist(object sender, RoutedEventArgs e)
         {
+            if (VisualStateManager.GoToElementState(this, "ShowFiles", false))
+                Debug.WriteLine("Switched to ShowFiles");
             FileList.DataContext = playlist.elemsOrder;
             FileList.CanUserDeleteRows = true;
             Location.Text = "Liste de lecture";
@@ -514,6 +519,11 @@ namespace WindowsMediaPlayer
                     if (playlist.Speed > 0.0625) { playlist.Speed /= 2; }
                     break;
             }
+        }
+
+        private void Shutdown(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
         }
     }
 }

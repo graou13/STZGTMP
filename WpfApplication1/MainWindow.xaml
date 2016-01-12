@@ -86,7 +86,7 @@
         <Menu x:Name="menu" Height="20" DockPanel.Dock="Top">
             <MenuItem Header="File">
                 <MenuItem Header="Open File" x:Name="open"/>
-                <MenuItem Header="Exit"/>
+                <MenuItem Header="Exit" Click="Shutdown"/>
             </MenuItem>
             <MenuItem Header="Playback">
                 <MenuItem Header="Speed">
@@ -248,8 +248,8 @@
                     
                 </DataGrid>
             </DockPanel>
-            <Image x:Name="ImagePlayer" Visibility="Collapsed" HorizontalAlignment="Left" Height="890" VerticalAlignment="Top" Width="1870" Margin="0,20,0,0"/>
-            <MediaElement x:Name="MediaPlayer" Visibility="Collapsed" UnloadedBehavior="Manual" LoadedBehavior="Manual" HorizontalAlignment="Left" Height="890" VerticalAlignment="Top" Width="1870" Margin="0,20,0,0" />
+            <Image x:Name="ImagePlayer" Visibility="Collapsed" Stretch="UniformToFill" StretchDirection="Both"/>
+            <MediaElement x:Name="MediaPlayer" Visibility="Collapsed" UnloadedBehavior="Manual" LoadedBehavior="Manual" Stretch="UniformToFill" StretchDirection="Both" MediaEnded="NextChapt_Click" MediaFailed="NextChapt_Click"/>
         </Grid>
     </DockPanel>
 </Window>

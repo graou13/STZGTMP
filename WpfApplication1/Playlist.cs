@@ -7,7 +7,9 @@ using System.Data;
 using System.Data.Objects;
 using System.Globalization;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 
 namespace WindowsMediaPlayer
 {
@@ -22,6 +24,7 @@ namespace WindowsMediaPlayer
         public bool allowFullscreen = false;
         private MediaElement _media;
         private Image _image;
+        private MainWindow _window;
 
         private void initVideo()
         {
@@ -67,36 +70,68 @@ namespace WindowsMediaPlayer
             get { return elems.Rows[index]; }
         }
 
-        public Playlist(MediaElement media, Image image)
+        public Playlist(ref MediaElement media, ref Image image)
         {
             _media = media;
             _image = image;
+            _window = (MainWindow)Application.Current.MainWindow;
             Volume = 100;
         }
 
-        public void Play()
+        public bool Play()
         {
-            foreach (DataRow row in elems.Rows)
+            _media.Source = null;
+            _image.Source = null;
+            if (index >= elems.Rows.Count)
             {
-                Debug.WriteLine("displaying playlist row");
-                foreach (DataColumn column in elems.Columns)
-                    Debug.WriteLine("    " + column.ColumnName + "=" + row[column]);
+                allowFullscreen = false;
+                if (_window.isFullscreen == true)
+                    _window.Fullscreen_Click(null, null);
+                _window.VolumeImg.Source = _window.getIcon(13);
+                return false;
             }
+            switch ((string)elems.Rows[index]["Type identifié"])
+            {
+                case "Audio":
+                    if (VisualStateManager.GoToState(_window, "ShowImage", false))
+                        Debug.WriteLine("Switched to ShowImage");
+                    _media.Source = (Uri)elems.Rows[index]["URI"];
+                    _media.Play();
+                    break;
+                case "Vidéo":
+                    if (VisualStateManager.GoToState(_window, "ShowMedia", false))
+                        Debug.WriteLine("Switched to ShowMedia");
+                    _media.Source = (Uri)elems.Rows[index]["URI"];
+                    _media.Play();
+                    break;
+                case "Image":
+                    if (VisualStateManager.GoToState(_window, "ShowImage", false))
+                        Debug.WriteLine("Switched to ShowImage");
+                    _image.Source = new BitmapImage((Uri)elems.Rows[index]["URI"]);
+                    break;
+                default:
+                    return false;
+            }
+            _window.MediaTime.IsEnabled = true;
+            allowFullscreen = true;
+            if (_window.isFullscreen == false)
+                _window.VolumeImg.Source = _window.getIcon(14);
+            return true;
         }
 
         public void Pause()
         {
-            
+            _media.Pause();
         }
         
         public void Stop()
         {
-
+            _media.Stop();
         }
         
         public void PreviousChapter()
         {
-
+            
         }
         
         public void NextChapter()
@@ -106,12 +141,18 @@ namespace WindowsMediaPlayer
         
         public void PreviousMedia()
         {
-
+            Stop();
+            if (index > 0)
+                index--;
+            Play();
         }
         
         public void NextMedia()
         {
-
+            Stop();
+            if (index < elems.Rows.Count)
+                index++;
+            Play();
         }
         
         public void Repeat()
