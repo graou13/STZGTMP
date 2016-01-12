@@ -8,20 +8,22 @@ using System.Data.Objects;
 using System.Globalization;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Xml.Serialization;
+using System.IO;
 
-namespace WindowsMediaPlayer
+namespace                           WindowsMediaPlayer
 {
-    public class Playlist
+    public class                    Playlist
     {
-        public DataTable elems = new DataTable();
-        public DataView elemsOrder;
-        private int index = 0;
-        public int repeatState = 0;
-        public bool isShuffled = false;
-        public bool isMute = false;
-        public bool allowFullscreen = false;
-        private MediaElement _media;
-        private Image _image;
+        public DataTable            elems = new DataTable();
+        public DataView             elemsOrder;
+        private int                 index = 0;
+        public int                  repeatState = 0;
+        public bool                 isShuffled = false;
+        public bool                 isMute = false;
+        public bool                 allowFullscreen = false;
+        private MediaElement        _media;
+        private Image               _image;
 
         private void initVideo()
         {
@@ -72,6 +74,7 @@ namespace WindowsMediaPlayer
             _media = media;
             _image = image;
             Volume = 100;
+            this.elemsOrder = this.elems.DefaultView;
         }
 
         public void Play()
@@ -124,14 +127,21 @@ namespace WindowsMediaPlayer
 
         }
 
-        public void LoadPlaylist(string name)
+        public void LoadPlaylist(string filename)
         {
-
+            DataTable myObject;
+            XmlSerializer mySerializer = new XmlSerializer(typeof(DataTable));
+            FileStream myFileStream = new FileStream(filename, FileMode.Open);
+            myObject = (DataTable) mySerializer.Deserialize(myFileStream);
         }
 
-        public void SavePlayList(string name)
+        public void SavePlayList(string filename)
         {
-
+            this.elems.TableName = filename;
+            XmlSerializer ser = new XmlSerializer(typeof(DataTable));
+            TextWriter writer = new StreamWriter(filename);
+            ser.Serialize(writer, elems);
+            writer.Close();
         }
     }
 }

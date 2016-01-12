@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="WindowsMediaPlayer.MainWindow"
-        Title="Windows Media Player" Height="970" Width="1870" MinWidth="550" MinHeight="360" WindowStartupLocation="CenterScreen">
+        Title="Windows Media Player" Height="720" Width="1280" MinWidth="550" MinHeight="360" WindowStartupLocation="CenterScreen">
     <DockPanel>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="SwitchableStates">
@@ -118,12 +118,12 @@
                 <MenuItem Header="About" x:Name="about"/>
             </MenuItem>
         </Menu>
-        <DockPanel x:Name="ControlPanel" Height="80" DockPanel.Dock="Bottom">
-            <DockPanel DockPanel.Dock="Top" Height="40">
+        <DockPanel x:Name="ControlPanel" Height="80" DockPanel.Dock="Bottom" Margin="0,0,0,5">
+            <DockPanel DockPanel.Dock="Top" Height="40" Margin="10,0,10,0">
                 <TextBlock x:Name="MediaTimeText" DockPanel.Dock="Left" VerticalAlignment="Center" Text="{Binding Path=TimeText}"/>
                 <Slider x:Name="MediaTime" VerticalAlignment="Center" Value="{Binding Path=Time, Mode=TwoWay}" Minimum="0" Maximum="1" IsEnabled="False"/>
             </DockPanel>
-            <Button Height="30" Width="30" Margin="2,0,2,0" DockPanel.Dock="Left" x:Name="Stop" Click="Stop_Click">
+            <Button Height="30" Width="30" Margin="10,0,2,0" DockPanel.Dock="Left" x:Name="Stop" Click="Stop_Click">
                 <Image x:Name="StopImg"/>
             </Button>
             <Button Height="30" Width="30" Margin="2,0,2,0" DockPanel.Dock="Left" x:Name="Play" Click="Play_Click">
@@ -133,7 +133,7 @@
                 <Image x:Name="PrevChaptImg"/>
             </Button>
             <Button Height="30" Width="30" Margin="2,0,2,0" DockPanel.Dock="Left" x:Name="NextChapt" Click="NextChapt_Click">
-                <Image x:Name="NextChaptImg"/>
+                <Image x:Name="NextChaptImg"/>  
             </Button>
             <Button Height="30" Width="30" Margin="2,0,2,0" DockPanel.Dock="Left" x:Name="PrevMedia" Click="PrevMedia_Click">
                 <Image x:Name="PrevMediaImg"/>
@@ -153,7 +153,7 @@
             <Button Height="30" Width="30" Margin="2,0,2,0" DockPanel.Dock="Left" x:Name="Fullscreen" Click="Fullscreen_Click">
                 <Image x:Name="FullscreenImg"/>
             </Button>
-            <Slider Width="100" VerticalAlignment="Center"  DockPanel.Dock="Right" x:Name="VolumeSlider" Value="{Binding Path=Volume}" Minimum="0" Maximum="100"/>
+            <Slider Width="100" VerticalAlignment="Center"  DockPanel.Dock="Right" x:Name="VolumeSlider" Value="{Binding Path=Volume}" Minimum="0" Maximum="100" Margin="10,0,10,0" />
             <Button Height="30" Width="30" Margin="4,0,2,0" DockPanel.Dock="Right" x:Name="Volume" Click="Volume_Click">
                 <Image x:Name="VolumeImg"/>
             </Button>
@@ -161,15 +161,15 @@
         </DockPanel>
         <Grid>
             <DockPanel x:Name="FileListContainer" Visibility="Visible">
-                <StackPanel Width="100" DockPanel.Dock="Left">
-                    <TextBlock FontWeight="Bold" x:Name="Location">Liste de lecture</TextBlock>
+                <StackPanel Width="100" DockPanel.Dock="Left" Margin="10,10,10,10">
+                    <TextBlock FontWeight="Bold" Margin="0,10,0,0" HorizontalAlignment="Center" x:Name="Location">Liste de lecture</TextBlock>
                     <Button Click="Display_Playlist">
                         Liste de lecture
                     </Button>
                     <Button Click="Display_SavedPlaylists">
                         Bibliothèque
                     </Button>
-                    <TextBlock FontWeight="Bold">Poste de Travail</TextBlock>
+                    <TextBlock FontWeight="Bold" Margin="0,10,0,0" HorizontalAlignment="Center">Répertoires</TextBlock>
                     <Button Click="Display_Audio">
                         Ma Musique
                     </Button>
@@ -181,14 +181,14 @@
                     </Button>
                 </StackPanel>
                 <DataGrid x:Name="FileList" AutoGenerateColumns="False" IsReadOnly="True" CanUserReorderColumns="True" CanUserResizeRows="False" CanUserDeleteRows="True" CanUserAddRows="False" ItemsSource="{Binding}"
-                          RowHeaderWidth="0"  Background="White" GridLinesVisibility="None" AlternationCount="2" SelectionChanged="FileList_SelectionChanged" PreparingCellForEdit="FileList_PreparingCellForEdit">
+                          RowHeaderWidth="0" Background="White" GridLinesVisibility="None" AlternationCount="2" SelectionChanged="FileList_SelectionChanged" PreparingCellForEdit="FileList_PreparingCellForEdit">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Titre" Binding="{Binding Path=Titre}"/>
-                        <DataGridTextColumn x:Name="DureeColumn" Header="Durée" Binding="{Binding Path=Longueur}"/>
-                        <DataGridTextColumn x:Name="ArtisteColumn" Visibility="Collapsed" Header="Artiste" Binding="{Binding Path='Artistes ayant participé'}"/>
-                        <DataGridTextColumn x:Name="GenreColumn" Header="Genre" Binding="{Binding Path=Genre}"/>
-                        <DataGridTextColumn x:Name="AlbumColumn" Header="Album" Binding="{Binding Path=Album}"/>
-                        <DataGridTextColumn x:Name="NumeroColumn" Header="Numéro de piste" Binding="{Binding Path='N°'}"/>
+                        <DataGridTextColumn Header="Titre" Binding="{Binding Path=Titre}" MinWidth="100" Width="250"/>
+                        <DataGridTextColumn x:Name="DureeColumn" Header="Durée" Binding="{Binding Path=Longueur}" MinWidth="100"/>
+                        <DataGridTextColumn x:Name="ArtisteColumn" Visibility="Collapsed" Header="Artiste" Binding="{Binding Path='Artistes ayant participé'}" MinWidth="100"/>
+                        <DataGridTextColumn x:Name="GenreColumn" Header="Genre" Binding="{Binding Path=Genre}" MinWidth="100"/>
+                        <DataGridTextColumn x:Name="AlbumColumn" Header="Album" Binding="{Binding Path=Album}" MinWidth="100"/>
+                        <DataGridTextColumn x:Name="NumeroColumn" Header="Numéro de piste" Binding="{Binding Path='N°'}" MinWidth="100"/>
                         <DataGridTextColumn x:Name="DescriptionColumn" Visibility="Collapsed" Header="Description" Binding="{Binding Path=Description}"/>
                         <DataGridTextColumn x:Name="NoteColumn" Visibility="Collapsed" Header="Note" Binding="{Binding Path=Notation}"/>
                         <DataGridTextColumn x:Name="IDColumn" Visibility="Collapsed" Header="ID" Binding="{Binding Path=ID}"/>
@@ -232,6 +232,9 @@
                         </ContextMenu>
                         <Style TargetType="{x:Type DataGridColumnHeader}">
                             <Setter Property="ContextMenu" Value="{StaticResource ResourceKey=DataGridColumnHeaderContextMenu}"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                            <Setter Property="Padding" Value="0,2,0,2" />
+                            <Setter Property="FontWeight" Value="Bold" />
                         </Style>
                         <Style TargetType="{x:Type DataGridRow}">
                             <Setter Property="ContextMenu" Value="{StaticResource ResourceKey=DataGridRowsContextMenu}"/>
