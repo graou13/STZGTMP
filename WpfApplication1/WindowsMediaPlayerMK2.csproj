@@ -81,6 +81,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FFinder.cs" />
+    <Compile Include="MWException.cs" />
+    <Compile Include="MWInterface.cs" />
     <Compile Include="Playlist.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

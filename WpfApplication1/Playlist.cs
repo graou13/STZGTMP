@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Xml.Serialization;
 using System.IO;
+using System.Windows.Media.Imaging;
 
 namespace                           WindowsMediaPlayer
 {
     public class                    Playlist
     {
         public DataTable            elems = new DataTable();
-        public DataView             elemsOrder;
         private int                 index = 0;
         public int                  repeatState = 0;
         public bool                 isShuffled = false;
@@ -69,32 +69,48 @@ namespace                           WindowsMediaPlayer
             get { return elems.Rows[index]; }
         }
 
-        public Playlist(MediaElement media, Image image)
+        public Playlist(ref MediaElement media, ref Image image)
         {
             _media = media;
             _image = image;
             Volume = 100;
-            this.elemsOrder = this.elems.DefaultView;
         }
 
-        public void Play()
+        public bool Play()
         {
-            foreach (DataRow row in elems.Rows)
+            _image.Source = new BitmapImage(new Uri(string.Empty));
+            _media.Source = new Uri(string.Empty);
+            if (index >= elems.Rows.Count && repeatState == 1)
+                index = 0;
+            else if (index >= elems.Rows.Count)
             {
-                Debug.WriteLine("displaying playlist row");
-                foreach (DataColumn column in elems.Columns)
-                    Debug.WriteLine("    " + column.ColumnName + "=" + row[column]);
+                allowFullscreen = false;
+                return false;
             }
+            switch ((string)CurrentMedia["Type identifié"])
+            {
+                case "Audio":
+                    _media.Source = (Uri)CurrentMedia["URI"];
+                    break;
+                case "Vidéo":
+                    _media.Source = (Uri)CurrentMedia["URI"];
+                    break;
+                case "Image":
+                    _image.Source = new BitmapImage((Uri)CurrentMedia["URI"]);
+                    break;
+            }
+            allowFullscreen = true;
+            return true;
         }
 
         public void Pause()
         {
-            
+            _media.Pause();
         }
         
         public void Stop()
         {
-
+            _media.Stop();
         }
         
         public void PreviousChapter()
@@ -109,17 +125,20 @@ namespace                           WindowsMediaPlayer
         
         public void PreviousMedia()
         {
-
+            if (index > 0)
+                index = index - 1;
         }
         
-        public void NextMedia()
+        public void NextMedia(bool wasFail)
         {
-
+            if (index < elems.Rows.Count && (repeatState != 2 || wasFail == true))
+                index = index + 1;
         }
         
         public void Repeat()
         {
-
+            repeatState = repeatState + 1;
+            repeatState = repeatState % 3;
         }
         
         public void Shuffle()

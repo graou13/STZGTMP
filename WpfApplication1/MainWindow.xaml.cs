@@ -21,14 +21,14 @@ public partial class                MainWindow : Window
         public MainWindow()
         {
             InitializeComponent();
-            playlist = new Playlist(MediaPlayer, ImagePlayer);
+            playlist = new Playlist(ref MediaPlayer, ref ImagePlayer);
             FFinder = new FFinder();
             MWInterface = new MWInterface();
 
             this.setIcons();
             this.FFinder.onStartup();
             playlist.elems = this.FFinder.getDataTable();
-            FileList.DataContext = playlist.elemsOrder;
+            FileList.DataContext = playlist.elems.DefaultView;
             VolumeSlider.DataContext = playlist;
             MediaTimeText.DataContext = playlist;
             MediaTime.DataContext = playlist;
@@ -48,12 +48,36 @@ public partial class                MainWindow : Window
             VolumeImg.Source = this.MWInterface.getIcon(13);
             FullscreenImg.Source = this.MWInterface.getIcon(15);
         }
-
+        
         private void Play_Click(object sender, RoutedEventArgs e)
         {
             if (playlist.elems.Rows.Count > 0)
             {
-                playlist.Play();
+                if (playlist.Play() == false)
+                {
+                    WindowState = System.Windows.WindowState.Normal;
+                    WindowStyle = System.Windows.WindowStyle.SingleBorderWindow;
+                    menu.Visibility = System.Windows.Visibility.Visible;
+                    FullscreenImg.Source = this.MWInterface.getIcon(15);
+                    return;
+                }
+                if (!isFullscreen)
+                    FullscreenImg.Source = this.MWInterface.getIcon(16);
+                else
+                    FullscreenImg.Source = this.MWInterface.getIcon(17);
+                switch ((string)playlist.CurrentMedia["Type identifié"])
+                {
+                    case "Audio":
+                        VisualStateManager.GoToState(this, "ShowImage", false);
+                        break;
+                    case "Vidéo":
+                        VisualStateManager.GoToState(this, "ShowMedia", false);
+                        break;
+                    case "Image":
+                        VisualStateManager.GoToState(this, "ShowImage", false);
+                        break;
+                }
+                MediaTime.IsEnabled = true;
                 PlayImg.Source = this.MWInterface.getIcon(1);
                 Play.Click += Pause_Click;
                 Play.Click -= Play_Click;
@@ -103,12 +127,16 @@ public partial class                MainWindow : Window
 
         private void PrevMedia_Click(object sender, RoutedEventArgs e)
         {
+            Stop_Click(sender, e);
             playlist.PreviousMedia();
+            Play_Click(sender, e);
         }
 
         private void NextMedia_Click(object sender, RoutedEventArgs e)
         {
-            playlist.NextMedia();
+            Stop_Click(sender, e);
+            playlist.NextMedia(false);
+            Play_Click(sender, e);
         }
 
         private void Repeat_Click(object sender, RoutedEventArgs e)
@@ -116,18 +144,16 @@ public partial class                MainWindow : Window
             switch (playlist.repeatState)
             {
                 case 0:
-                    playlist.repeatState = 1;
                     RepeatImg.Source = this.MWInterface.getIcon(8);
                     break;
                 case 1:
-                    playlist.repeatState = 2;
                     RepeatImg.Source = this.MWInterface.getIcon(9);
                     break;
                 case 2:
-                    playlist.repeatState = 0;
                     RepeatImg.Source = this.MWInterface.getIcon(7);
                     break;
             }
+            playlist.Repeat();
         }
 
         private void Shuffle_Click(object sender, RoutedEventArgs e)
@@ -136,7 +162,7 @@ public partial class                MainWindow : Window
                 ShuffleImg.Source = this.MWInterface.getIcon(11);
             else
                 ShuffleImg.Source = this.MWInterface.getIcon(10);
-            playlist.isShuffled = !playlist.isShuffled;
+            playlist.Shuffle();
         }
 
         private void Fullscreen_Click(object sender, RoutedEventArgs e)
@@ -183,7 +209,7 @@ public partial class                MainWindow : Window
 
         private void Display_Playlist(object sender, RoutedEventArgs e)
         {
-            FileList.DataContext = playlist.elemsOrder;
+            FileList.DataContext = playlist.elems.DefaultView;
             FileList.CanUserDeleteRows = true;
             Location.Text = "Liste de lecture";
         }
@@ -327,14 +353,14 @@ public partial class                MainWindow : Window
         private void SortOrder(object sender, RoutedEventArgs e)
         {
             this.FFinder.setSort(string.Empty);
-            playlist.elemsOrder.Sort = string.Empty;
+            playlist.elems.DefaultView.Sort = string.Empty;
             MenuItem item = e.Source as MenuItem;
             string sens = item.Name.Substring(item.Name.LastIndexOf('_')).Replace('_', ' ');
-            string columnSorted = item.Name.Substring(0, item.Name.LastIndexOf('_')).Replace('_', ' ');
+            string columnSorted = item.Name.Substring(0, item.Name.LastIndexOf('_')).Replace('_', ' ').Replace('à','°');
             if (FileList.DataContext == this.FFinder.getDataView())
                 this.FFinder.setSort("[" + columnSorted + "]" + sens);
-            else if (FileList.DataContext == playlist.elemsOrder)
-                playlist.elemsOrder.Sort = "[" + columnSorted + "]" + sens;
+            else if (FileList.DataContext == playlist.elems.DefaultView)
+                playlist.elems.DefaultView.Sort = "[" + columnSorted + "]" + sens;
         }
 
         private void IncreaseVolume(object sender, RoutedEventArgs e)
@@ -358,6 +384,11 @@ public partial class                MainWindow : Window
                     if (playlist.Speed > 0.0625) { playlist.Speed /= 2; }
                     break;
             }
+        }
+
+        private void MediaFailed(object sender, ExceptionRoutedEventArgs e)
+        {
+            playlist.NextMedia(true);
         }
     }
 }
