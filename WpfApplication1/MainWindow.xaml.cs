@@ -1,12 +1,14 @@
-﻿using                                   System;
-using                                   System.Collections.Generic;
-using                                   System.Data;
-using                                   System.Diagnostics;
-using                                   System.Linq;
-using                                   System.Text;
-using                                   System.Threading.Tasks;
-using                                   System.Windows;
-using                                   System.Windows.Controls;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace                               WindowsMediaPlayer
 {
@@ -15,6 +17,7 @@ public partial class                MainWindow : Window
         private Playlist                playlist;
         private FFinder                 FFinder;
         private MWInterface             MWInterface;
+        private DispatcherTimer         timer;
 
         private bool                    isFullscreen = false;
 
@@ -24,14 +27,16 @@ public partial class                MainWindow : Window
             playlist = new Playlist(ref MediaPlayer, ref ImagePlayer);
             FFinder = new FFinder();
             MWInterface = new MWInterface();
+            timer = new System.Windows.Threading.DispatcherTimer();
+            this.Height = 720;
+            this.Width = 1280;
 
             this.setIcons();
             this.FFinder.onStartup();
             playlist.elems = this.FFinder.getDataTable();
             FileList.DataContext = playlist.elems.DefaultView;
             VolumeSlider.DataContext = playlist;
-            MediaTimeText.DataContext = playlist;
-            MediaTime.DataContext = playlist;
+            timer.Tick += TimerTick;
         }
 
         private void                    setIcons()
@@ -53,6 +58,7 @@ public partial class                MainWindow : Window
         {
             if (playlist.elems.Rows.Count > 0)
             {
+                timer.Stop();
                 if (playlist.Play() == false)
                 {
                     WindowState = System.Windows.WindowState.Normal;
@@ -68,16 +74,23 @@ public partial class                MainWindow : Window
                 switch ((string)playlist.CurrentMedia["Type identifié"])
                 {
                     case "Audio":
-                        VisualStateManager.GoToState(this, "ShowImage", false);
+                        VisualStateManager.GoToElementState(this, "ShowImage", false);
+                        MediaTime.Maximum = DateTime.ParseExact((string)playlist.CurrentMedia["Longueur"], "hh:mm:ss", CultureInfo.InvariantCulture).TimeOfDay.TotalSeconds;
+                        MediaTime.IsEnabled = true;
+                        MediaPlayer.Play();
+                        timer.Start();
                         break;
                     case "Vidéo":
-                        VisualStateManager.GoToState(this, "ShowMedia", false);
+                        VisualStateManager.GoToElementState(this, "ShowMedia", false);MediaTime.Maximum = DateTime.ParseExact((string)playlist.CurrentMedia["Longueur"], "hh:mm:ss", CultureInfo.InvariantCulture).TimeOfDay.TotalSeconds;
+                        MediaTime.IsEnabled = true;
+                        MediaPlayer.Play();
+                        timer.Start();
                         break;
                     case "Image":
-                        VisualStateManager.GoToState(this, "ShowImage", false);
+                        VisualStateManager.GoToElementState(this, "ShowImage", false);
                         break;
                 }
-                MediaTime.IsEnabled = true;
+                
                 PlayImg.Source = this.MWInterface.getIcon(1);
                 Play.Click += Pause_Click;
                 Play.Click -= Play_Click;
@@ -92,6 +105,7 @@ public partial class                MainWindow : Window
         private void Stop_Click(object sender, RoutedEventArgs e)
         {
             playlist.Stop();
+            timer.Stop();
             PlayImg.Source = this.MWInterface.getIcon(2);
             Play.Click -= Pause_Click;
             Play.Click += Play_Click;
@@ -209,6 +223,7 @@ public partial class                MainWindow : Window
 
         private void Display_Playlist(object sender, RoutedEventArgs e)
         {
+            VisualStateManager.GoToElementState(this, "ShowFiles", false);
             FileList.DataContext = playlist.elems.DefaultView;
             FileList.CanUserDeleteRows = true;
             Location.Text = "Liste de lecture";
@@ -389,6 +404,22 @@ public partial class                MainWindow : Window
         private void MediaFailed(object sender, ExceptionRoutedEventArgs e)
         {
             playlist.NextMedia(true);
+        }
+
+        private void MediaTime_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            playlist.Time = MediaTime.Value;
+        }
+
+        private void TimerTick(object sender, EventArgs e)
+        {
+            MediaTime.Value = playlist.Time;
+            MediaTimeText.Text = playlist.TimeText;
+        }
+
+        private void VolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            playlist.Volume = VolumeSlider.Value;
         }
     }
 }

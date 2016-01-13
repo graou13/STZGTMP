@@ -12,18 +12,18 @@ using System.Xml.Serialization;
 using System.IO;
 using System.Windows.Media.Imaging;
 
-namespace                           WindowsMediaPlayer
+namespace                       WindowsMediaPlayer
 {
-    public class                    Playlist
+    public class                Playlist
     {
-        public DataTable            elems = new DataTable();
-        private int                 index = 0;
-        public int                  repeatState = 0;
-        public bool                 isShuffled = false;
-        public bool                 isMute = false;
-        public bool                 allowFullscreen = false;
-        private MediaElement        _media;
-        private Image               _image;
+        public DataTable        elems = new DataTable();
+        private int             index = 0;
+        public int              repeatState = 0;
+        public bool             isShuffled = false;
+        public bool             isMute = false;
+        public bool             allowFullscreen = false;
+        private MediaElement    _media;
+        private Image           _image;
 
         private void initVideo()
         {
@@ -48,7 +48,7 @@ namespace                           WindowsMediaPlayer
 
         public string TimeText
         {
-            get { if (_media.Position.TotalSeconds != 0) { return _media.Position.ToString("hh:mm:ss"); } else { return "--:--:--"; } }
+            get { if (_media.Position.TotalSeconds != 0) { return _media.Position.ToString(@"hh\:mm\:ss"); } else { return "--:--:--"; } }
             set { _media.Position = DateTime.ParseExact(value, "hh:mm:ss", CultureInfo.InvariantCulture).TimeOfDay; }
         }
 
@@ -78,8 +78,8 @@ namespace                           WindowsMediaPlayer
 
         public bool Play()
         {
-            _image.Source = new BitmapImage(new Uri(string.Empty));
-            _media.Source = new Uri(string.Empty);
+            _image.Source = null;
+            _media.Source = null;
             if (index >= elems.Rows.Count && repeatState == 1)
                 index = 0;
             else if (index >= elems.Rows.Count)

@@ -2,87 +2,87 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="WindowsMediaPlayer.MainWindow"
-        Title="Windows Media Player" Height="720" Width="1280" MinWidth="550" MinHeight="360" WindowStartupLocation="CenterScreen">
+        Title="Windows Media Player" MinWidth="550" MinHeight="360" WindowStartupLocation="CenterScreen">
+    <VisualStateManager.VisualStateGroups>
+        <VisualStateGroup x:Name="SwitchableStates">
+            <VisualState x:Name="ShowImage">
+                <Storyboard>
+                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ImagePlayer" Storyboard.TargetProperty="Visibility" Duration="0">
+                        <DiscreteObjectKeyFrame KeyTime="0">
+                            <DiscreteObjectKeyFrame.Value>
+                                <Visibility>Visible</Visibility>
+                            </DiscreteObjectKeyFrame.Value>
+                        </DiscreteObjectKeyFrame>
+                    </ObjectAnimationUsingKeyFrames>
+                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MediaPlayer" Storyboard.TargetProperty="Visibility" Duration="0">
+                        <DiscreteObjectKeyFrame KeyTime="0">
+                            <DiscreteObjectKeyFrame.Value>
+                                <Visibility>Collapsed</Visibility>
+                            </DiscreteObjectKeyFrame.Value>
+                        </DiscreteObjectKeyFrame>
+                    </ObjectAnimationUsingKeyFrames>
+                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="FileListContainer" Storyboard.TargetProperty="Visibility" Duration="0">
+                        <DiscreteObjectKeyFrame KeyTime="0">
+                            <DiscreteObjectKeyFrame.Value>
+                                <Visibility>Collapsed</Visibility>
+                            </DiscreteObjectKeyFrame.Value>
+                        </DiscreteObjectKeyFrame>
+                    </ObjectAnimationUsingKeyFrames>
+                </Storyboard>
+            </VisualState>
+            <VisualState x:Name="ShowMedia">
+                <Storyboard>
+                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ImagePlayer" Storyboard.TargetProperty="Visibility" Duration="0">
+                        <DiscreteObjectKeyFrame KeyTime="0">
+                            <DiscreteObjectKeyFrame.Value>
+                                <Visibility>Collapsed</Visibility>
+                            </DiscreteObjectKeyFrame.Value>
+                        </DiscreteObjectKeyFrame>
+                    </ObjectAnimationUsingKeyFrames>
+                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MediaPlayer" Storyboard.TargetProperty="Visibility" Duration="0">
+                        <DiscreteObjectKeyFrame KeyTime="0">
+                            <DiscreteObjectKeyFrame.Value>
+                                <Visibility>Visible</Visibility>
+                            </DiscreteObjectKeyFrame.Value>
+                        </DiscreteObjectKeyFrame>
+                    </ObjectAnimationUsingKeyFrames>
+                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="FileListContainer" Storyboard.TargetProperty="Visibility" Duration="0">
+                        <DiscreteObjectKeyFrame KeyTime="0">
+                            <DiscreteObjectKeyFrame.Value>
+                                <Visibility>Collapsed</Visibility>
+                            </DiscreteObjectKeyFrame.Value>
+                        </DiscreteObjectKeyFrame>
+                    </ObjectAnimationUsingKeyFrames>
+                </Storyboard>
+            </VisualState>
+            <VisualState x:Name="ShowFiles">
+                <Storyboard>
+                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ImagePlayer" Storyboard.TargetProperty="Visibility" Duration="0">
+                        <DiscreteObjectKeyFrame KeyTime="0">
+                            <DiscreteObjectKeyFrame.Value>
+                                <Visibility>Collapsed</Visibility>
+                            </DiscreteObjectKeyFrame.Value>
+                        </DiscreteObjectKeyFrame>
+                    </ObjectAnimationUsingKeyFrames>
+                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MediaPlayer" Storyboard.TargetProperty="Visibility" Duration="0">
+                        <DiscreteObjectKeyFrame KeyTime="0">
+                            <DiscreteObjectKeyFrame.Value>
+                                <Visibility>Collapsed</Visibility>
+                            </DiscreteObjectKeyFrame.Value>
+                        </DiscreteObjectKeyFrame>
+                    </ObjectAnimationUsingKeyFrames>
+                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="FileListContainer" Storyboard.TargetProperty="Visibility" Duration="0">
+                        <DiscreteObjectKeyFrame KeyTime="0">
+                            <DiscreteObjectKeyFrame.Value>
+                                <Visibility>Visible</Visibility>
+                            </DiscreteObjectKeyFrame.Value>
+                        </DiscreteObjectKeyFrame>
+                    </ObjectAnimationUsingKeyFrames>
+                </Storyboard>
+            </VisualState>
+        </VisualStateGroup>
+    </VisualStateManager.VisualStateGroups>
     <DockPanel>
-        <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup x:Name="SwitchableStates">
-                <VisualState x:Name="ShowImage">
-                    <Storyboard>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ImagePlayer" Storyboard.TargetProperty="Visibility" Duration="0">
-                            <DiscreteObjectKeyFrame KeyTime="0">
-                                <DiscreteObjectKeyFrame.Value>
-                                    <Visibility>Visible</Visibility>
-                                </DiscreteObjectKeyFrame.Value>
-                            </DiscreteObjectKeyFrame>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MediaPlayer" Storyboard.TargetProperty="Visibility" Duration="0">
-                            <DiscreteObjectKeyFrame KeyTime="0">
-                                <DiscreteObjectKeyFrame.Value>
-                                    <Visibility>Collapsed</Visibility>
-                                </DiscreteObjectKeyFrame.Value>
-                            </DiscreteObjectKeyFrame>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="FileListContainer" Storyboard.TargetProperty="Visibility" Duration="0">
-                            <DiscreteObjectKeyFrame KeyTime="0">
-                                <DiscreteObjectKeyFrame.Value>
-                                    <Visibility>Collapsed</Visibility>
-                                </DiscreteObjectKeyFrame.Value>
-                            </DiscreteObjectKeyFrame>
-                        </ObjectAnimationUsingKeyFrames>
-                    </Storyboard>
-                </VisualState>
-                <VisualState x:Name="ShowMedia">
-                    <Storyboard>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ImagePlayer" Storyboard.TargetProperty="Visibility" Duration="0">
-                            <DiscreteObjectKeyFrame KeyTime="0">
-                                <DiscreteObjectKeyFrame.Value>
-                                    <Visibility>Collapsed</Visibility>
-                                </DiscreteObjectKeyFrame.Value>
-                            </DiscreteObjectKeyFrame>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MediaPlayer" Storyboard.TargetProperty="Visibility" Duration="0">
-                            <DiscreteObjectKeyFrame KeyTime="0">
-                                <DiscreteObjectKeyFrame.Value>
-                                    <Visibility>Visible</Visibility>
-                                </DiscreteObjectKeyFrame.Value>
-                            </DiscreteObjectKeyFrame>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="FileListContainer" Storyboard.TargetProperty="Visibility" Duration="0">
-                            <DiscreteObjectKeyFrame KeyTime="0">
-                                <DiscreteObjectKeyFrame.Value>
-                                    <Visibility>Collapsed</Visibility>
-                                </DiscreteObjectKeyFrame.Value>
-                            </DiscreteObjectKeyFrame>
-                        </ObjectAnimationUsingKeyFrames>
-                    </Storyboard>
-                </VisualState>
-                <VisualState x:Name="ShowFiles">
-                    <Storyboard>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ImagePlayer" Storyboard.TargetProperty="Visibility" Duration="0">
-                            <DiscreteObjectKeyFrame KeyTime="0">
-                                <DiscreteObjectKeyFrame.Value>
-                                    <Visibility>Collapsed</Visibility>
-                                </DiscreteObjectKeyFrame.Value>
-                            </DiscreteObjectKeyFrame>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MediaPlayer" Storyboard.TargetProperty="Visibility" Duration="0">
-                            <DiscreteObjectKeyFrame KeyTime="0">
-                                <DiscreteObjectKeyFrame.Value>
-                                    <Visibility>Collapsed</Visibility>
-                                </DiscreteObjectKeyFrame.Value>
-                            </DiscreteObjectKeyFrame>
-                        </ObjectAnimationUsingKeyFrames>
-                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="FileListContainer" Storyboard.TargetProperty="Visibility" Duration="0">
-                            <DiscreteObjectKeyFrame KeyTime="0">
-                                <DiscreteObjectKeyFrame.Value>
-                                    <Visibility>Visible</Visibility>
-                                </DiscreteObjectKeyFrame.Value>
-                            </DiscreteObjectKeyFrame>
-                        </ObjectAnimationUsingKeyFrames>
-                    </Storyboard>
-                </VisualState>
-            </VisualStateGroup>
-        </VisualStateManager.VisualStateGroups>
         <Menu x:Name="menu" Height="20" DockPanel.Dock="Top">
             <MenuItem Header="File">
                 <MenuItem Header="Open File" x:Name="open"/>
@@ -120,8 +120,8 @@
         </Menu>
         <DockPanel x:Name="ControlPanel" Height="80" DockPanel.Dock="Bottom" Margin="0,0,0,5">
             <DockPanel DockPanel.Dock="Top" Height="40" Margin="10,0,10,0">
-                <TextBlock x:Name="MediaTimeText" DockPanel.Dock="Left" VerticalAlignment="Center" Text="{Binding Path=TimeText}"/>
-                <Slider x:Name="MediaTime" VerticalAlignment="Center" Value="{Binding Path=Time, Mode=TwoWay}" Minimum="0" Maximum="1" IsEnabled="False"/>
+                <TextBlock x:Name="MediaTimeText" DockPanel.Dock="Left" VerticalAlignment="Center" Text="--:--"/>
+                <Slider x:Name="MediaTime" VerticalAlignment="Center" Value="0" Minimum="0" Maximum="1" IsEnabled="False" ValueChanged="MediaTime_ValueChanged"/>
             </DockPanel>
             <Button Height="30" Width="30" Margin="10,0,2,0" DockPanel.Dock="Left" x:Name="Stop" Click="Stop_Click">
                 <Image x:Name="StopImg"/>
@@ -153,7 +153,7 @@
             <Button Height="30" Width="30" Margin="2,0,2,0" DockPanel.Dock="Left" x:Name="Fullscreen" Click="Fullscreen_Click">
                 <Image x:Name="FullscreenImg"/>
             </Button>
-            <Slider Width="100" VerticalAlignment="Center"  DockPanel.Dock="Right" x:Name="VolumeSlider" Value="{Binding Path=Volume}" Minimum="0" Maximum="100" Margin="10,0,10,0" />
+            <Slider Width="100" VerticalAlignment="Center"  DockPanel.Dock="Right" x:Name="VolumeSlider" Value="{Binding Path=Volume}" Minimum="0" Maximum="100" Margin="10,0,10,0" ValueChanged="VolumeSlider_ValueChanged"/>
             <Button Height="30" Width="30" Margin="4,0,2,0" DockPanel.Dock="Right" x:Name="Volume" Click="Volume_Click">
                 <Image x:Name="VolumeImg"/>
             </Button>
@@ -181,7 +181,7 @@
                     </Button>
                 </StackPanel>
                 <DataGrid x:Name="FileList" AutoGenerateColumns="False" IsReadOnly="True" CanUserReorderColumns="True" CanUserResizeRows="False" CanUserDeleteRows="True" CanUserAddRows="False" ItemsSource="{Binding}"
-                          RowHeaderWidth="0" Background="White" GridLinesVisibility="None" AlternationCount="2" SelectionChanged="FileList_SelectionChanged" PreparingCellForEdit="FileList_PreparingCellForEdit">
+                          RowHeaderWidth="0" Background="White" GridLinesVisibility="None" AlternationCount="2" SelectionChanged="FileList_SelectionChanged" PreparingCellForEdit="FileList_PreparingCellForEdit" >
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Titre" Binding="{Binding Path=Titre}" MinWidth="100" Width="250"/>
                         <DataGridTextColumn x:Name="DureeColumn" Header="Durée" Binding="{Binding Path=Longueur}" MinWidth="100"/>
@@ -251,8 +251,8 @@
                     
                 </DataGrid>
             </DockPanel>
-            <Image x:Name="ImagePlayer" Visibility="Collapsed" HorizontalAlignment="Left" Height="890" VerticalAlignment="Top" Width="1870" Margin="0,20,0,0"/>
-            <MediaElement x:Name="MediaPlayer" Visibility="Collapsed" UnloadedBehavior="Manual" LoadedBehavior="Manual" HorizontalAlignment="Left" Height="890" VerticalAlignment="Top" Width="1870" Margin="0,20,0,0" />
+            <Image x:Name="ImagePlayer" Visibility="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,20,0,0"/>
+            <MediaElement x:Name="MediaPlayer" Visibility="Collapsed" UnloadedBehavior="Manual" LoadedBehavior="Manual" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="UniformToFill" StretchDirection="Both" Margin="0,20,0,0" MediaEnded="NextMedia_Click" MediaFailed="MediaFailed"/>
         </Grid>
     </DockPanel>
 </Window>
