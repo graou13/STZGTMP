@@ -162,14 +162,14 @@
         <Grid>
             <DockPanel x:Name="FileListContainer" Visibility="Visible">
                 <StackPanel Width="100" DockPanel.Dock="Left" Margin="10,10,10,10">
-                    <TextBlock FontWeight="Bold" Margin="0,10,0,0" HorizontalAlignment="Center" x:Name="Location">Liste de lecture</TextBlock>
+                    <TextBlock FontWeight="Bold" Foreground="SteelBlue" Margin="0,10,0,0" HorizontalAlignment="Center" x:Name="Location">Liste de lecture</TextBlock>
                     <Button Click="Display_Playlist">
                         Liste de lecture
                     </Button>
                     <Button Click="Display_SavedPlaylists">
                         Bibliothèque
                     </Button>
-                    <TextBlock FontWeight="Bold" Margin="0,10,0,0" HorizontalAlignment="Center">Répertoires</TextBlock>
+                    <TextBlock FontWeight="Bold" Foreground="SteelBlue" Margin="0,10,0,0" HorizontalAlignment="Center">Répertoires</TextBlock>
                     <Button Click="Display_Audio">
                         Ma Musique
                     </Button>
@@ -234,7 +234,6 @@
                             <Setter Property="ContextMenu" Value="{StaticResource ResourceKey=DataGridColumnHeaderContextMenu}"/>
                             <Setter Property="HorizontalContentAlignment" Value="Center" />
                             <Setter Property="Padding" Value="0,2,0,2" />
-                            <Setter Property="FontWeight" Value="Bold" />
                         </Style>
                         <Style TargetType="{x:Type DataGridRow}">
                             <Setter Property="ContextMenu" Value="{StaticResource ResourceKey=DataGridRowsContextMenu}"/>
