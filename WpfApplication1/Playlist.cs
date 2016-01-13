@@ -21,29 +21,16 @@ namespace                       WindowsMediaPlayer
         public int              repeatState = 0;
         public bool             isShuffled = false;
         public bool             isMute = false;
+        private bool            isPaused = false;
+        public double           oldVolume = 0;
         public bool             allowFullscreen = false;
         private MediaElement    _media;
         private Image           _image;
 
-        private void initVideo()
-        {
-
-        }
-
-        private void initMusic()
-        {
-
-        }
-
-        private void initImage()
-        {
-
-        }
-
         public double Volume
         {
-            get { return _media.Volume; }
-            set { _media.Volume = value; }
+            get { return _media.Volume * 100; }
+            set { _media.Volume = value / 100; }
         }
 
         public string TimeText
@@ -78,6 +65,12 @@ namespace                       WindowsMediaPlayer
 
         public bool Play()
         {
+            if (this.isPaused)
+            {
+                this._media.Play();
+                this.isPaused = false;
+                return (true);
+            }
             _image.Source = null;
             _media.Source = null;
             if (index >= elems.Rows.Count && repeatState == 1)
@@ -106,6 +99,7 @@ namespace                       WindowsMediaPlayer
         public void Pause()
         {
             _media.Pause();
+            this.isPaused = true;
         }
         
         public void Stop()
@@ -143,7 +137,7 @@ namespace                       WindowsMediaPlayer
         
         public void Shuffle()
         {
-
+            this.isShuffled = !this.isShuffled;
         }
 
         public void LoadPlaylist(string filename)

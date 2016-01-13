@@ -58,7 +58,6 @@ public partial class                MainWindow : Window
         {
             if (playlist.elems.Rows.Count > 0)
             {
-                timer.Stop();
                 if (playlist.Play() == false)
                 {
                     WindowState = System.Windows.WindowState.Normal;
@@ -67,6 +66,7 @@ public partial class                MainWindow : Window
                     FullscreenImg.Source = this.MWInterface.getIcon(15);
                     return;
                 }
+                timer.Stop();
                 if (!isFullscreen)
                     FullscreenImg.Source = this.MWInterface.getIcon(16);
                 else
@@ -105,6 +105,7 @@ public partial class                MainWindow : Window
         private void Stop_Click(object sender, RoutedEventArgs e)
         {
             playlist.Stop();
+            this.TimerTick(null, null);
             timer.Stop();
             PlayImg.Source = this.MWInterface.getIcon(2);
             Play.Click -= Pause_Click;
@@ -202,11 +203,14 @@ public partial class                MainWindow : Window
             {
                 VolumeSlider.IsEnabled = true;
                 VolumeImg.Source = this.MWInterface.getIcon(13);
+                this.playlist.Volume = this.playlist.oldVolume;
             }
             else
             {
                 VolumeSlider.IsEnabled = false;
                 VolumeImg.Source = this.MWInterface.getIcon(14);
+                this.playlist.oldVolume = this.playlist.Volume;
+                this.playlist.Volume = 0;
             }
             playlist.isMute = !playlist.isMute;
         }
@@ -415,11 +419,6 @@ public partial class                MainWindow : Window
         {
             MediaTime.Value = playlist.Time;
             MediaTimeText.Text = playlist.TimeText;
-        }
-
-        private void VolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            playlist.Volume = VolumeSlider.Value;
         }
     }
 }
